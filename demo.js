@@ -1,4 +1,6 @@
 var page = require('webpage').create();
+var fs = require("fs");
+
 var loadInProgress = false;
 var testindex = 0;
 
@@ -26,57 +28,60 @@ page.onLoadFinished = function(status) {
     }
 };
 
-page.onError = function (msg, trace) {
+page.onError = function(msg, trace) {
     console.log(msg);
     trace.forEach(function(item) {
         console.log('  ', item.file, ':', item.line);
     });
 };
 
-page.onUrlChanged = function(targetUrl) {
-  console.log('New URL: ' + targetUrl);
-};
 
 
 var steps = [
     function() {
-        page.open('http://docs.dvatonline.gov.in/gms01/admin/logint2forweb.aspx');
+        page.open('file:///home/vinod/workspace/DS2%20Automation/1.html');
     },
     function() {
+        var content = fs.read('test.json')
+        var json = JSON.parse(content)
+        console.log(json)
+        page.includeJs("https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js", function() {
+            page.evaluate(function(json) {
+                for (key in json) {
+                    console.log(json)
+                    if (json.hasOwnProperty(key)) {
+                        $('input[name=' + key + ']').val(json[key]);
+                        $("#" + key).val(json[key])
+                    }
+                }
+            }, json);
+        })
+    },
+    function() {
+        console.log('Form Filled from json'); // This function is for navigating deeper than the first-level form submission
+        page.render('filledForm.png');
         page.injectJs("https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js");
-        page.evaluate(function() {
-            $('input[name="ctl00$ContentPlaceHolder1$txtID"]').val('07960404046');
-            $("#ctl00_ContentPlaceHolder1_btnNext").click();
-            console.log('ID filled');
-        });
-        page.render('IDPage.png');
-    },
-    function() {
-        console.log('Captcha page');
-        page.render('captcha.png');
-        console.log('captcha recorded in file : captcha.png')
-        var captcha = consoleRead();
-        captcha.replace(/ /g,'')
-        page.injectJs("https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js");
-        page.evaluate(function(captcha) {
-            console.log(captcha)
-            $('input[name="ctl00$ContentPlaceHolder1$txtPwd"]').val('unevensparrow@21');
-            $('input[name="ctl00$ContentPlaceHolder1$txtLetter"]').val(captcha);            
-            $("#ctl00_ContentPlaceHolder1_btnSubmit").click();
-            console.log('login button clicked');
-        }, captcha);
-        // page.render('')
-    },
-    function() {
-        console.log('main page:'); // This function is for navigating deeper than the first-level form submission
-        page.render('mainPage.png');
         page.evaluate(function() {
             // console.log('More Stuff: ' + document.body.innerHTML);
         });
     },
     function() {
-        page.render("site.png")
+        page.injectJs('http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js');
+
+        var arg1 = consoleRead();
+
+        // page.evaluate(function(arg1) {
+        //     $('.yourFormBox').val(arg1);
+        //     $('.yourForm').submit();
+        // }, arg1);
+
+        console.log('enered : ', arg1);
+
+    },
+    function() {
+
         console.log('Exiting');
+
     }
 ];
 
@@ -99,4 +104,4 @@ interval = setInterval(function() {
         console.log("Complete!");
         phantom.exit();
     }
-}, 5000);
+}, 500);

@@ -1,0 +1,23 @@
+{
+	"ctl00$ContentPlaceHolder1$ddlPurchase":"sdasd",
+
+    "ctl00$ContentPlaceHolder1$txtSellerTIN":"165465",
+    "ctl00$ContentPlaceHolder1$txtInvoiceNo" : "68464",
+    "ctl00$ContentPlaceHolder1$txtInvoiceDate" : "19-10-2016",
+    "ctl00$ContentPlaceHolder1$ddlCommodity" : "xyz@xyz.com",
+
+    "ctl00$ContentPlaceHolder1$ddlVATRate" : "xyz@xyz.com",
+
+    "ctl00$ContentPlaceHolder1$txtAmt" : "xyz@xyz.com",
+    "ctl00$ContentPlaceHolder1$txtAmtCST" : "xyz@xyz.com",
+    "ctl00$ContentPlaceHolder1$ddlMode" : "xyz@xyz.com",
+
+    "ctl00$ContentPlaceHolder1$txtTranName" : "xyz@xyz.com",
+    "ctl00$ContentPlaceHolder1$txtReceiptNo" : "xyz@xyz.com",
+    "ctl00$ContentPlaceHolder1$txtGRDate" : "19-10-2016",
+    "ctl00$ContentPlaceHolder1$txtVehSeries" : "xyz@xyz.com",
+    "ctl00$ContentPlaceHolder1$txtVehicleNo" : "xyz@xyz.com",
+    "ctl00$ContentPlaceHolder1$txtAmtFt" : "xyz@xyz.com",
+    "ctl00$ContentPlaceHolder1$txtDispatchPlace" : "xyz@xyz.com",
+    "ctl00$ContentPlaceHolder1$txtEntryDate" : "19-10-2016"
+}

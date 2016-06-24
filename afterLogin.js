@@ -33,61 +33,51 @@ page.onError = function (msg, trace) {
     });
 };
 
-page.onUrlChanged = function(targetUrl) {
-  console.log('New URL: ' + targetUrl);
-};
 
 
 var steps = [
     function() {
-        page.open('http://docs.dvatonline.gov.in/gms01/admin/logint2forweb.aspx');
+        page.open('http://docs.dvatonline.gov.in/gms01/AfterLoginT2.aspx');
     },
     function() {
         page.injectJs("https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js");
         page.evaluate(function() {
-            $('input[name="ctl00$ContentPlaceHolder1$txtID"]').val('07960404046');
-            $("#ctl00_ContentPlaceHolder1_btnNext").click();
-            console.log('ID filled');
+            $("#ctl00_ContentPlaceHolder1_btnT2EntryForm").click();
+            console.log('Moving to Form Page');
         });
-        page.render('IDPage.png');
+        page.render('MainPage.png');
     },
     function() {
-        console.log('Captcha page');
-        page.render('captcha.png');
-        console.log('captcha recorded in file : captcha.png')
-        var captcha = consoleRead();
-        captcha.replace(/ /g,'')
+        console.log('Form page');
+        page.render('FormPage.png');
+        page.injectJs("http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js");
+        page.evaluate(function() {
+            console.log("\n *START* \n");
+            var fs = require("fs");
+            var content = fs.readFileSync("data.json");
+            var json = JSON.parse(content);
+            for(key in json)
+            {
+              if(json.hasOwnProperty(key))
+                $('input[name='+key+']').val(json[key]);
+            }
+            console.log("\n *EXIT* \n");
+            // $("#ctl00_ContentPlaceHolder1_imgPictureRendum").render("captcha.png");
+            console.log('form Filled');
+        });
+    },
+    function() {
+        console.log('Form Filled from json'); // This function is for navigating deeper than the first-level form submission
+        page.render('filledForm.png');
         page.injectJs("https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js");
-        page.evaluate(function(captcha) {
-            console.log(captcha)
-            $('input[name="ctl00$ContentPlaceHolder1$txtPwd"]').val('unevensparrow@21');
-            $('input[name="ctl00$ContentPlaceHolder1$txtLetter"]').val(captcha);            
-            $("#ctl00_ContentPlaceHolder1_btnSubmit").click();
-            console.log('login button clicked');
-        }, captcha);
-        // page.render('')
-    },
-    function() {
-        console.log('main page:'); // This function is for navigating deeper than the first-level form submission
-        page.render('mainPage.png');
         page.evaluate(function() {
             // console.log('More Stuff: ' + document.body.innerHTML);
         });
     },
     function() {
-        page.render("site.png")
         console.log('Exiting');
     }
 ];
-
-function consoleRead() {
-    var system = require('system');
-
-    system.stdout.writeLine('CaptchaCode: ');
-    var line = system.stdin.readLine();
-
-    return line;
-}
 
 interval = setInterval(function() {
     if (!loadInProgress && typeof steps[testindex] == "function") {
@@ -99,4 +89,4 @@ interval = setInterval(function() {
         console.log("Complete!");
         phantom.exit();
     }
-}, 5000);
+}, 500);
